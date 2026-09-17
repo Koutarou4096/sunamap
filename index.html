@@ -183,24 +183,30 @@
                                 }
                             }
 
-                            // 吹き出しの中身を完成版に差し替え
-                            infoWindow.setContent(`
-                        <div class="info-window" style="max-width: 200px; font-family: sans-serif;">
-                            <div style="font-size: 16px; font-weight: bold; margin-bottom: 4px;">
-                                ${spot.name} ${ratingHtml}
-                            </div>
-                            <div style="font-size: 13px; color: #444; margin-bottom: 8px;">
-                                S先生のメモ： ${spot.comment}
-                            </div>
-                            ${imgHtml}
-                            <div style="margin-top: 12px; text-align: center;">
-                                <a href="${mapsLink}" target="_blank" rel="noopener noreferrer" 
-                                   style="display: inline-block; background-color: #4285F4; color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 13px; width: 80%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                   📍 経路を見る
-                                </a>
-                            </div>
-                        </div>
-                    `);
+                           // 吹き出しの中身を完成版に差し替え（132行目付近）
+infoWindow.setContent(`
+    <div class="info-window" style="max-width: 200px; font-family: sans-serif;">
+        <div style="font-size: 16px; font-weight: bold; margin-bottom: 4px;">
+            ${spot.name} ${ratingHtml}
+        </div>
+        
+        <!-- ★ S先生の評価を追加 -->
+        <div style="font-size: 14px; font-weight: bold; color: #ff5722; margin-bottom: 4px;">
+            S先生の評価: ★${spot.rate}
+        </div>
+        
+        <div style="font-size: 13px; color: #444; margin-bottom: 8px;">
+            S先生のメモ： ${spot.comment}
+        </div>
+        ${imgHtml}
+        <div style="margin-top: 12px; text-align: center;">
+            <a href="${mapsLink}" target="_blank" rel="noopener noreferrer" 
+               style="display: inline-block; background-color: #4285F4; color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 13px; width: 80%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+               📍 経路を見る
+            </a>
+        </div>
+    </div>
+`);
 
                         } catch (e) {
                             console.error("Places APIの取得に失敗しました", e);
@@ -232,7 +238,8 @@
                     name: cols[0],
                     lat: parseFloat(cols[1]),
                     lng: parseFloat(cols[2]),
-                    comment: cols[3]
+                    comment: cols[3],
+                    rate: cols[4]
                 };
             });
         }
