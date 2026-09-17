@@ -49,7 +49,7 @@
             text-align: center;
         }
 
-        p{ 
+        p {
             font-family: "Inter", "BIZ UDPGothic", sans-serif;
             font-size: 16px;
             font-weight: 700;
@@ -77,114 +77,114 @@
 
     <script>
         // ==========================================
-// 設定項目
-// ==========================================
-const SPREADSHEET_CSV_URL = "ここに公開したCSVのURLを貼り付け";
+        // 設定項目
+        // ==========================================
+        const SPREADSHEET_CSV_URL = "ここに公開したCSVのURLを貼り付け";
 
-(g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
-    key: "YOUR_API_KEY", // ★ご自身のAPIキーに書き換えてください
-    v: "weekly",
-});
+        (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
+            key: "AIzaSyApyFiIeY0BkNINgy3oWN5XjDcUmqqtAXo", 
+            v: "weekly",
+        });
 
-async function init() {
-    // ★ Places API のライブラリ（Place）を追加で読み込む！
-    const [{ AdvancedMarkerElement }, { InfoWindow }, { Place }] = await Promise.all([
-        google.maps.importLibrary('marker'),
-        google.maps.importLibrary('maps'),
-        google.maps.importLibrary('places') // これを追加
-    ]);
+        async function init() {
+            // ★ Places API のライブラリ（Place）を追加で読み込む
+            const [{ AdvancedMarkerElement }, { InfoWindow }, { Place }] = await Promise.all([
+                google.maps.importLibrary('marker'),
+                google.maps.importLibrary('maps'),
+                google.maps.importLibrary('places') // これを追加
+            ]);
 
-    const mapElement = document.querySelector('gmp-map');
-    const innerMap = mapElement.innerMap;
+            const mapElement = document.querySelector('gmp-map');
+            const innerMap = mapElement.innerMap;
 
-    innerMap.setOptions({
-        mapTypeControl: false,
-        gestureHandling: 'greedy'
-    });
-    const infoWindow = new InfoWindow();
-
-    // ------------------------------------------
-    // 現在地取得（ピンは立てず、移動だけする設定）
-    // ------------------------------------------
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const userLocation = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                };
-                innerMap.setCenter(userLocation);
-                // ※ここに現在地ピンを立てるコードがありましたが、削除してスッキリさせました
-            },
-            (error) => { console.warn("位置情報が取得できませんでした", error); },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-    }
-
-    // ------------------------------------------
-    // スプレッドシートのデータ取得とピン立て
-    // ------------------------------------------
-    try {
-        const spots = await fetchSpreadsheetData(SPREADSHEET_CSV_URL);
-
-        spots.forEach(spot => {
-            if (isNaN(spot.lat) || isNaN(spot.lng)) return;
-
-            const marker = new AdvancedMarkerElement({
-                map: innerMap,
-                position: { lat: spot.lat, lng: spot.lng },
-                title: spot.name,
+            innerMap.setOptions({
+                mapTypeControl: false,
+                gestureHandling: 'greedy'
             });
+            const infoWindow = new InfoWindow();
 
-            // ★ ピンをクリックしたときの処理をPlaces API対応に超強化！
-            marker.addListener('click', async () => {
-                infoWindow.close();
-                
-                // 読み込み中の仮表示
-                infoWindow.setContent(`
+            // ------------------------------------------
+            // 現在地取得（ピンは立てず、移動だけする設定）
+            // ------------------------------------------
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        innerMap.setCenter(userLocation);
+                        // ※ここに現在地ピンを立てるコードがありましたが、削除してスッキリさせました
+                    },
+                    (error) => { console.warn("位置情報が取得できませんでした", error); },
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+                );
+            }
+
+            // ------------------------------------------
+            // スプレッドシートのデータ取得とピン立て
+            // ------------------------------------------
+            try {
+                const spots = await fetchSpreadsheetData(SPREADSHEET_CSV_URL);
+
+                spots.forEach(spot => {
+                    if (isNaN(spot.lat) || isNaN(spot.lng)) return;
+
+                    const marker = new AdvancedMarkerElement({
+                        map: innerMap,
+                        position: { lat: spot.lat, lng: spot.lng },
+                        title: spot.name,
+                    });
+
+                    // ★ ピンをクリックしたときの処理をPlaces API対応に超強化！
+                    marker.addListener('click', async () => {
+                        infoWindow.close();
+
+                        // 読み込み中の仮表示
+                        infoWindow.setContent(`
                     <div class="info-window" style="min-width: 150px;">
                         <strong>${spot.name}</strong><br>
                         <span style="color: #666; font-size: 12px;">店舗情報を取得中...</span>
                     </div>
                 `);
-                infoWindow.open(marker.map, marker);
+                        infoWindow.open(marker.map, marker);
 
-                try {
-                    // お店の名前と座標を元に、Googleマップから情報を検索
-                    const request = {
-                        textQuery: spot.name,
-                        fields: ['displayName', 'photos', 'rating', 'googleMapsURI'],
-                        locationBias: { lat: spot.lat, lng: spot.lng },
-                    };
-                    
-                    const { places } = await Place.searchByText(request);
-                    
-                    let ratingHtml = "";
-                    let imgHtml = "";
-                    // デフォルトの経路リンク（お店が見つからなかった時用）
-                    let mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+                        try {
+                            // お店の名前と座標を元に、Googleマップから情報を検索
+                            const request = {
+                                textQuery: spot.name,
+                                fields: ['displayName', 'photos', 'rating', 'googleMapsURI'],
+                                locationBias: { lat: spot.lat, lng: spot.lng },
+                            };
 
-                    // Googleマップ上でお店が見つかった場合
-                    if (places && places.length > 0) {
-                        const place = places[0];
-                        
-                        // 星評価があれば追加
-                        if (place.rating) {
-                            ratingHtml = `<span style="color: #fbbc04;">★</span> ${place.rating}`;
-                        }
-                        // 写真があれば追加（サイズを指定して取得）
-                        if (place.photos && place.photos.length > 0) {
-                            const photoUrl = place.photos[0].getURI({ maxWidth: 200, maxHeight: 150 });
-                            imgHtml = `<img src="${photoUrl}" alt="お店の写真" style="width: 100%; border-radius: 8px; margin-top: 8px; object-fit: cover; max-height: 120px;">`;
-                        }
-                        // そのお店の公式GoogleマップURLがあれば上書き（より正確な経路案内になる）
-                        if (place.googleMapsURI) {
-                            mapsLink = place.googleMapsURI;
-                        }
-                    }
+                            const { places } = await Place.searchByText(request);
 
-                    // 吹き出しの中身を完成版に差し替え
-                    infoWindow.setContent(`
+                            let ratingHtml = "";
+                            let imgHtml = "";
+                            // デフォルトの経路リンク（お店が見つからなかった時用）
+                            let mapsLink = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+
+                            // Googleマップ上でお店が見つかった場合
+                            if (places && places.length > 0) {
+                                const place = places[0];
+
+                                // 星評価があれば追加
+                                if (place.rating) {
+                                    ratingHtml = `<span style="color: #fbbc04;">★</span> ${place.rating}`;
+                                }
+                                // 写真があれば追加（サイズを指定して取得）
+                                if (place.photos && place.photos.length > 0) {
+                                    const photoUrl = place.photos[0].getURI({ maxWidth: 200, maxHeight: 150 });
+                                    imgHtml = `<img src="${photoUrl}" alt="お店の写真" style="width: 100%; border-radius: 8px; margin-top: 8px; object-fit: cover; max-height: 120px;">`;
+                                }
+                                // そのお店の公式GoogleマップURLがあれば上書き（より正確な経路案内になる）
+                                if (place.googleMapsURI) {
+                                    mapsLink = place.googleMapsURI;
+                                }
+                            }
+
+                            // 吹き出しの中身を完成版に差し替え
+                            infoWindow.setContent(`
                         <div class="info-window" style="max-width: 200px; font-family: sans-serif;">
                             <div style="font-size: 16px; font-weight: bold; margin-bottom: 4px;">
                                 ${spot.name} ${ratingHtml}
@@ -202,42 +202,42 @@ async function init() {
                         </div>
                     `);
 
-                } catch (e) {
-                    console.error("Places APIの取得に失敗しました", e);
-                    // エラー時はシンプルな表示にする
-                    infoWindow.setContent(`
+                        } catch (e) {
+                            console.error("Places APIの取得に失敗しました", e);
+                            // エラー時はシンプルな表示にする
+                            infoWindow.setContent(`
                         <div class="info-window">
                             <strong>${spot.name}</strong>
                             <p>${spot.comment}</p>
                         </div>
                     `);
-                }
+                        }
+                    });
+                });
+            } catch (err) {
+                console.error("CSVデータエラー:", err);
+            }
+        }
+
+        async function fetchSpreadsheetData(url) {
+            const response = await fetch(url);
+            const csvText = await response.text();
+            const rows = csvText.trim().split('\n');
+            const dataRows = rows.slice(1);
+
+            return dataRows.map(row => {
+                // カンマの中の不要な空白や引用符を消す
+                const cols = row.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
+                return {
+                    name: cols[0],
+                    lat: parseFloat(cols[1]),
+                    lng: parseFloat(cols[2]),
+                    comment: cols[3]
+                };
             });
-        });
-    } catch (err) {
-        console.error("CSVデータエラー:", err);
-    }
-}
+        }
 
-async function fetchSpreadsheetData(url) {
-    const response = await fetch(url);
-    const csvText = await response.text();
-    const rows = csvText.trim().split('\n');
-    const dataRows = rows.slice(1);
-
-    return dataRows.map(row => {
-        // カンマの中の不要な空白や引用符を消す
-        const cols = row.split(',').map(col => col.trim().replace(/^"|"$/g, ''));
-        return {
-            name: cols[0],
-            lat: parseFloat(cols[1]),
-            lng: parseFloat(cols[2]),
-            comment: cols[3]
-        };
-    });
-}
-
-init();
+        init();
     </script>
 </body>
 
