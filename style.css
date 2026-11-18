@@ -1,0 +1,65 @@
+<style>
+        .biz-udpgothic-regular {
+            font-family: "BIZ UDPGothic", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .biz-udpgothic-bold {
+            font-family: "BIZ UDPGothic", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .inter-<uniquifier> {
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: "Inter", "BIZ UDPGothic", sans-serif;
+            background-color: #efefef;
+
+            /* 画面全体を縦並びのFlex-boxにする */
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 900;
+            margin: 16px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            font-weight: 700;
+            margin: 0 16px 16px 16px;
+            text-align: center;
+        }
+
+        gmp-map {
+            flex: 1;
+            width: 100%;
+        }
+
+        .info-window {
+            font-size: 14px;
+        }
+
+        footer {
+            background-color: #ffffff;
+            color: #666666;
+            text-align: center;
+            padding: 12px;
+            font-size: 12px;
+            border-top: 1px solid #dddddd;
+        }
+    </style>
